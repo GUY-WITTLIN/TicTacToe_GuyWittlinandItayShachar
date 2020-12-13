@@ -15,6 +15,11 @@ namespace TicTacToe_GuyWittlinandItayShachar
     {
         private bool m_IsFirstPlayer = true;
         private int tick;
+        private int drawcount = 0;
+
+        private oWon oWon = new oWon();
+        private xWon xWon = new xWon();
+        private Draw draw = new Draw();
 
         public Form1()
         {
@@ -157,7 +162,6 @@ namespace TicTacToe_GuyWittlinandItayShachar
         }
         private void sign_Click(object sender, EventArgs e)
         {
-            int drawcount = 0;
             PictureBox sign = sender as PictureBox;
 
             if (m_IsFirstPlayer)
@@ -168,8 +172,12 @@ namespace TicTacToe_GuyWittlinandItayShachar
                 sign.Enabled = false;
                 if (CheckMatrix(FormToMatrix(), "X"))
                 {
-                    MessageBox.Show("X, You Win");
+                    xWon.ShowDialog();
                     timer1.Stop();
+                }
+                else
+                {
+                    drawcount++;
                 }
             }
             else
@@ -180,15 +188,26 @@ namespace TicTacToe_GuyWittlinandItayShachar
                 sign.Enabled = false;
                 if (CheckMatrix(FormToMatrix(), "0"))
                 {
-                    MessageBox.Show("0, You Win");
+                    oWon.ShowDialog();
                     timer1.Stop();
                 }
+                else
+                {
+                    drawcount++;
+                }
+            }
+            if (drawcount == 9)
+            {
+                draw.ShowDialog();
+                timer1.Stop();
             }
         }
         private void Restat_Click(object sender, EventArgs e)
         {
             m_IsFirstPlayer = true;
             Turns.Text = "X, Your Turn";
+            drawcount = 0;
+
             pictureBox00.Image = Resources.None;
             pictureBox00.Enabled = true;
             pictureBox01.Image = Resources.None;
@@ -213,7 +232,6 @@ namespace TicTacToe_GuyWittlinandItayShachar
             tick = 0;
             timer1.Start();
         }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             tick++;
